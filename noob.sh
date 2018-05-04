@@ -39,19 +39,21 @@
 
 				newEntryPath=/Users/$USER/$newEntry
 				echo 'Your entered '$newEntryPath
-				
-					while [ -d $newEntryPath ] 
-					do
-						read -p 'Directory name already exists.  Choose a new name: ' newEntry
-						newEntrypath=/Users/$USER/$newEntry
-					done
+			
+				while [ -d $newEntryPath ] 
+				do
+					read -p 'Directory name already exists.  Choose a new name: ' newEntry
+					newEntryPath=/Users/$USER/$newEntry
+				done
 
-				if [ ! -d $newEntrypath ]
+				#if the dir does not exist create dir and data file
+				if [ ! -d $newEntryPath ]
 				then
-					mkdir $newEntrypath
-					echo 'Your new time entry directory is: '$newEntrypath 
-					touch $newEntrypath/$newEntry.dat
-					ls -la $newEntrypath
+					echo "in if statement"
+					mkdir $newEntryPath
+					echo 'Your new time entry directory is: '$newEntryPath 
+					echo > ${newEntryPath}/$newEntry.dat
+					ls -la $newEntryPath
 
 					#New while clause to begin tracking time
 					echo 'Would you like to begin tracking your time?'
@@ -62,8 +64,11 @@
 							yes)
 								beginTimeStamp=$(timeStamp)
 								trackStartDate=$(dateStamp)
+								echo $beginTimeStamp >> $newEntryPath/$newEntry.dat
+								echo $trackStartDate >> $newEntryPath/$newEntry.dat
 								echo $beginTimeStamp
 								echo $trackStartDate
+								cat $newEntryPath/$newEntry.dat
 								break
 								;;
 							no)
