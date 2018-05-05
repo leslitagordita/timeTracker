@@ -1,19 +1,6 @@
 
     #!/bin/bash
-    # A sample Bash script, by Ryan
- #    echo Hello would you like to start tracking your time?
- #    #need a way to log the yes or no with an if statement
- #    echo
-
- #    read -p 'Would you like to add a description to this time log? ' YN
- #    #need a way to log the yes or no with an if statement
- #    if [$YN=[Yy]]
-	# then
-	#     read -p Please enter a short description for this time log: LOGDESCRIPTION
-	#     echo You have entered: $LOGDESCRIPTION
- #    fi
-
-    #Create new record or retrieve old record
+    #Time tracking script
 
     function timeStamp() 
     {
@@ -23,6 +10,15 @@
 	function dateStamp()
 	{
 		date "+%m-%d-%Y" 
+	}
+
+	#Reads a file line by line.  File name should be passed as parameter.
+	function getTrackingVars()
+	{
+		while IFS= read -r line; do
+			echo $line
+			echo "in the getTrackingVars function"
+		done < "$1"
 	}
 
 
@@ -66,9 +62,11 @@
 								trackStartDate=$(dateStamp)
 								echo $beginTimeStamp >> $newEntryPath/$newEntry.dat
 								echo $trackStartDate >> $newEntryPath/$newEntry.dat
-								echo $beginTimeStamp
-								echo $trackStartDate
-								cat $newEntryPath/$newEntry.dat
+								echo "This is your time stamp: "$beginTimeStamp
+								echo "This is your logged date: "$trackStartDate
+								#cat $newEntryPath/$newEntry.dat
+
+								getTrackingVars "$newEntryPath/$newEntry.dat"
 								break
 								;;
 							no)
