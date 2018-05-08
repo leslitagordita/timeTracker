@@ -2,12 +2,12 @@
     #!/bin/bash
     #Time tracking script
 
-    function timeStamp() 
+    function setTimeStamp() 
     {
   		date "+%r"
 	}
 
-	function dateStamp()
+	function setDateStamp()
 	{
 		date "+%m-%d-%Y" 
 	}
@@ -19,6 +19,12 @@
 			echo $line
 			echo "in the getTrackingVars function"
 		done < "$1"
+	}
+
+	function getCombinedHours()
+	{
+		previousTimeStamp
+		currentTimeStamp=$(setTimeStamp)
 	}
 
 
@@ -48,7 +54,7 @@
 					echo "in if statement"
 					mkdir $newEntryPath
 					echo 'Your new time entry directory is: '$newEntryPath 
-					echo > ${newEntryPath}/$newEntry.dat
+					printf "Project name: "$newEntry"\n\n" >> ${newEntryPath}/$newEntry.txt
 					ls -la $newEntryPath
 
 					#New while clause to begin tracking time
@@ -58,15 +64,17 @@
 					read trackResponse
 						case $trackResponse in
 							yes)
-								beginTimeStamp=$(timeStamp)
-								trackStartDate=$(dateStamp)
-								echo $beginTimeStamp >> $newEntryPath/$newEntry.dat
-								echo $trackStartDate >> $newEntryPath/$newEntry.dat
+								beginTimeStamp=$(setTimeStamp)
+								trackStartDate=$(setDateStamp)
+								
+								echo "Date: "$trackStartDate >> $newEntryPath/$newEntry.txt
+								echo "Start time: "$beginTimeStamp >> $newEntryPath/$newEntry.txt
+								
 								echo "This is your time stamp: "$beginTimeStamp
 								echo "This is your logged date: "$trackStartDate
-								#cat $newEntryPath/$newEntry.dat
+								
 
-								getTrackingVars "$newEntryPath/$newEntry.dat"
+								getTrackingVars "$newEntryPath/$newEntry.txt"
 								break
 								;;
 							no)
@@ -91,9 +99,9 @@
 					COUNTER=0
 					echo $COUNTER
 
-					# while [ -a /Users/$USER/$previousEntry/$previousEntry.dat] || [ $COUNTER=0 ]
+					# while [ -a /Users/$USER/$previousEntry/$previousEntry.txt] || [ $COUNTER=0 ]
 					# do
-					# 	echo 'test text' >> $previousEntry.dat
+					# 	echo 'test text' >> $previousEntry.txt
 					# 	(($COUNTER++))
 					# done
 
@@ -106,26 +114,3 @@
 		  esac
 		done #end while 
 
-  #   echo "Would you like to add a description to this time log?"
-		# while :
-		# do
-		#   read USERRESPONSE
-		#   case $USERRESPONSE in
-		# 	yes)
-		# 		read -p 'Enter in a short description: ' DESCRIPTION
-		# 		echo 'You entered: ' $DESCRIPTION 
-		# 		break
-		# 		;;
-		# 	no)
-		# 		echo "See you again!"
-		# 		break
-		# 		;;
-		# 	*)
-		# 		echo "Sorry, I don't understand"
-		# 		;;
-		#   esac
-		# done
-
-
-    #read RESPONSE
-    #STARTTIME=$(date)
